@@ -1,0 +1,26 @@
+/* 
+  Localizable.strings
+  GetAllHealthData
+
+  Created by ROLF J. on 2022/09/09.
+  
+*/
+
+// MARK: - SignInViewWord
+signInLabel = "Enter your ID code(ex:999)";
+signInPlaceHolder = "999";
+signInButton = "Sign In";
+
+// MARK: - MainViewWord
+startTimeLabel = "Start date";
+endTimeLabel = "End date";
+queryButton = "Upload";
+
+// MARK: - AlertWord
+alertConfirm = "OK";
+alertCancel = "Cancel";
+onlyNumber = "Type numbers only";
+IDLength3 = "Only 3 numbers are allowed for ID";
+typeAgain = "Please enter it again";
+signInComplete = "Success to sign in!";
+restartRequest = "App will terminate. Please restart the app!";

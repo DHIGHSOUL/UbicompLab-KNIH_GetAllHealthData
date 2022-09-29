@@ -1,0 +1,26 @@
+/* 
+  Localizable.strings
+  GetAllHealthData
+
+  Created by ROLF J. on 2022/09/09.
+  
+*/
+
+// MARK: - SignInViewWord
+signInLabel = "발급받은 3자리 숫자를 입력해주세요!(ex:999)";
+signInPlaceHolder = "999";
+signInButton = "로그인";
+
+// MARK: - MainViewWord
+startTimeLabel = "시작 날짜";
+endTimeLabel = "종료 날짜";
+queryButton = "업로드";
+
+// MARK: - AlertWord
+alertConfirm = "확인";
+alertCancel = "취소";
+onlyNumber = "숫자만 입력하세요.";
+IDLength3 = "아이디는 3자리입니다.";
+typeAgain = "다시 입력해주세요!";
+signInComplete = "로그인에 성공하였습니다!";
+restartRequest = "앱이 꺼집니다. 다시 시작해주세요!";
