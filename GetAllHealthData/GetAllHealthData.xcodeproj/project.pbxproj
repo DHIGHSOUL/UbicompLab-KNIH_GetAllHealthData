@@ -387,13 +387,16 @@
 				DEVELOPMENT_TEAM = 8RN9H3Z673;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GetAllHealthData/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = KNIH_Health;
+				INFOPLIST_KEY_CFBundleDisplayName = "Health24_건강데이터";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "This application needs access permission of health app because of querying health data.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "This application needs access permission of health app because of querying health data.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -418,13 +421,16 @@
 				DEVELOPMENT_TEAM = 8RN9H3Z673;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GetAllHealthData/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = KNIH_Health;
+				INFOPLIST_KEY_CFBundleDisplayName = "Health24_건강데이터";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "This application needs access permission of health app because of querying health data.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "This application needs access permission of health app because of querying health data.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

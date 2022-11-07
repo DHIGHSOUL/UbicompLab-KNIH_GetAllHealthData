@@ -23,6 +23,15 @@ struct LanguageChange {
         static let queryButton = "queryButton".localized
     }
     
+    // Upload view
+    struct UploadViewWord {
+        static let uploadHRButton = "uploadHRButton".localized
+        static let uploadStepButton = "uploadStepButton".localized
+        static let uploadEnergyButton = "uploadEnergyButton".localized
+        static let uploadDistanceButton = "uploadDistanceButton".localized
+        static let uploadSleepButton = "uploadSleepButton".localized
+    }
+    
     // Alert
     struct AlertWord {
         static let alertConfirm = "alertConfirm".localized
@@ -32,6 +41,8 @@ struct LanguageChange {
         static let typeAgain = "typeAgain".localized
         static let signInComplete = "signInComplete".localized
         static let restartRequest = "restartRequest".localized
+        static let noStartDateString = "noStartDateString".localized
+        static let noEndDateString = "noEndDateString".localized
     }
     
 }

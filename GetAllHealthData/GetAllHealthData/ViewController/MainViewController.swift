@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 import HealthKit
-import NVActivityIndicatorView
 
 class MainViewController: UIViewController {
     
@@ -67,7 +66,7 @@ class MainViewController: UIViewController {
     }()
     
     // 파일 제작 및 업로드를 지시하는 Button
-    private let makeAndUploadHealthDataButton: UIButton = {
+    private let moveToUploadViewController: UIButton = {
         let button = UIButton()
         var buttonConfiguration = UIButton.Configuration.filled()
         buttonConfiguration.baseBackgroundColor = .systemBlue
@@ -122,7 +121,7 @@ class MainViewController: UIViewController {
         startDatePicker.addTarget(self, action: #selector(startDatePickerValueDidChange(_ :)), for: .valueChanged)
         endDatePicker.addTarget(self, action: #selector(endDatePickerValueDidChange(_ :)), for: .valueChanged)
         
-        let views = [schLogoImageView, testStartTextField, testEndTextField, testStartLabel, testEndLabel, makeAndUploadHealthDataButton]
+        let views = [schLogoImageView, testStartTextField, testEndTextField, testStartLabel, testEndLabel, moveToUploadViewController]
         
         for newView in views {
             view.addSubview(newView)
@@ -161,13 +160,41 @@ class MainViewController: UIViewController {
             make.centerX.equalTo(testEndTextField.snp.centerX)
         }
         
-        makeAndUploadHealthDataButton.snp.makeConstraints { make in
+        moveToUploadViewController.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
             make.centerX.equalToSuperview()
             make.width.equalTo(150)
             make.height.equalTo(50)
         }
-        makeAndUploadHealthDataButton.addTarget(self, action: #selector(pressUploadButton), for: .touchUpInside)
+        moveToUploadViewController.addTarget(self, action: #selector(pressUploadButton), for: .touchUpInside)
+    }
+    
+    // 시작 날짜를 지정하지 않은 경우
+    private func noStartDate() -> Bool {
+        if testStartTextField.text == nil {
+            let stringAlert = UIAlertController(title: LanguageChange.AlertWord.noStartDateString, message: nil, preferredStyle: .alert)
+            let okButton = UIAlertAction(title: LanguageChange.AlertWord.alertConfirm, style: .default) { _ in
+                self.testStartTextField.text = ""
+            }
+            stringAlert.addAction(okButton)
+            present(stringAlert, animated: true, completion: nil)
+            return false
+        }
+        return true
+    }
+    
+    // 종료 날짜를 지정하지 않은 경우
+    private func noEndDate() -> Bool {
+        if testEndTextField.text == nil {
+            let stringAlert = UIAlertController(title: LanguageChange.AlertWord.noEndDateString, message: nil, preferredStyle: .alert)
+            let okButton = UIAlertAction(title: LanguageChange.AlertWord.alertConfirm, style: .default) { _ in
+                self.testEndTextField.text = ""
+            }
+            stringAlert.addAction(okButton)
+            present(stringAlert, animated: true, completion: nil)
+            return false
+        }
+        return true
     }
     
     // MARK: - @objc Method
@@ -189,9 +216,24 @@ class MainViewController: UIViewController {
         self.testEndTextField.text = formatter.string(from: endDatePicker.date)
     }
     
-    // 업로드 버튼을 눌렀을 때 건강 데이터 업로드를 진행하는 메소드
+    // 업로드 버튼을 눌렀을 때 업로드 ViewController로 이동하는 메소드
     @objc private func pressUploadButton() {
-        HealthKitManager.shared.makeHealthCSVFileAndUpload(startDate: selectedStartDate ?? Date(), endDate: selectedEndDate ?? Date())
+        if noStartDate()==true && noEndDate()==true {
+            var testStart = Calendar.current.date(byAdding: .day, value: -1, to: startDatePicker.date)
+            testStart = Calendar.current.date(bySetting: .hour, value: 00, of: testStart ?? Date())
+            testStart = Calendar.current.date(bySetting: .minute, value: 00, of: testStart ?? Date())
+            testStart = Calendar.current.date(bySetting: .second, value: 00, of: testStart ?? Date())
+            var testEnd = Calendar.current.date(bySetting: .hour, value: 00, of: endDatePicker.date)
+            testEnd = Calendar.current.date(bySetting: .minute, value: 00, of: testEnd ?? Date())
+            testEnd = Calendar.current.date(bySetting: .second, value: 00, of: testEnd ?? Date())
+            UserDefaults.standard.setValue(testStart?.timeIntervalSince1970, forKey: "testStartDate")
+            UserDefaults.standard.setValue(testEnd?.timeIntervalSince1970, forKey: "testEndDate")
+            
+            print("Test date set, Move to UploadViewController")
+            let uploadViewController = UploadViewController()
+            uploadViewController.modalPresentationStyle = .fullScreen
+            self.present(uploadViewController, animated: true, completion: nil)
+        }
     }
     
 }

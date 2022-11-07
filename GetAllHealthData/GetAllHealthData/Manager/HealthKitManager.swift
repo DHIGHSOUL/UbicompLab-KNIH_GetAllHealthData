@@ -150,7 +150,7 @@ class HealthKitManager {
                 return
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 15) {
                 if result?.count == 0 {
                     print("Step Query Count(No Data) Error, Set Error String")
                     let errorStepString = "\(Int(startTime.timeIntervalSince1970)),\(Int(endTime.timeIntervalSince1970)),iPhone,0"
@@ -171,7 +171,7 @@ class HealthKitManager {
                     let printResultToQuantity: HKQuantitySample = newData as! HKQuantitySample
                     let collectedStepData = Int(printResultToQuantity.quantity.doubleValue(for: .count()))
                     
-                    let newStepData = "\(startCollectTime),\(endCollectTime),\(collectDevice!),\(collectedStepData)"
+                    let newStepData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedStepData)"
                     
                     self.stepStringDataArray.append(newStepData)
                 }
@@ -184,7 +184,7 @@ class HealthKitManager {
     // 사용한 활성에너지(cal)를 얻는 메소드
     func getActiveEnergyPerDay(startDate: Date, endDate: Date) {
         guard let activeEnergyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned) else { return }
-        let startDate = Calendar.current.startOfDay(for: endDate)
+        let startDate = Calendar.current.startOfDay(for: startDate)
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
         
         let query = HKSampleQuery(sampleType: activeEnergyType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil) { (_, result, error) in
@@ -195,7 +195,7 @@ class HealthKitManager {
                 return
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 15) {
                 if result?.count == 0 {
                     print("Energy Query Count(No Data) Error, Set Error String")
                     let errorEnergyString = "\(Int(startDate.timeIntervalSince1970)),\(Int(endDate.timeIntervalSince1970)),iPhone,0"
@@ -216,8 +216,7 @@ class HealthKitManager {
                     let printResultToQuantity: HKQuantitySample = newData as! HKQuantitySample
                     let collectedEnergyData = Int(printResultToQuantity.quantity.doubleValue(for: .smallCalorie()))
                     
-                    let newEnergyData = "\(startCollectTime),\(endCollectTime),\(collectDevice!),\(collectedEnergyData)"
-                    
+                    let newEnergyData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedEnergyData)"
                     self.energyStringDataArray.append(newEnergyData)
                 }
             }
@@ -229,7 +228,7 @@ class HealthKitManager {
     // 걷고 뛴 거리(meter)를 얻는 메소드
     func getDistanceWalkAndRunPerDay(startDate: Date, endDate: Date) {
         guard let distanceType = HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning) else { return }
-        let startDate = Calendar.current.startOfDay(for: endDate)
+        let startDate = Calendar.current.startOfDay(for: startDate)
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
         
         let query = HKSampleQuery(sampleType: distanceType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil) { (_, result, error) in
@@ -240,7 +239,7 @@ class HealthKitManager {
                 return
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 15) {
                 if result?.count == 0 {
                     print("Distance Query Count(No Data) Error, Set Error String")
                     let errorDistanceString = "\(Int(startDate.timeIntervalSince1970)),\(Int(endDate.timeIntervalSince1970)),iPhone,0"
@@ -261,7 +260,7 @@ class HealthKitManager {
                     let printResultToQuantity: HKQuantitySample = newData as! HKQuantitySample
                     let collectedDistanceData = Int(printResultToQuantity.quantity.doubleValue(for: .meter()) * 1000)
                     
-                    let newDistanceData = "\(startCollectTime),\(endCollectTime),\(collectDevice!),\(collectedDistanceData)"
+                    let newDistanceData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedDistanceData)"
                     
                     self.distanceStringDataArray.append(newDistanceData)
                 }
@@ -284,7 +283,7 @@ class HealthKitManager {
                 return
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 15) {
                 if result?.count == 0 {
                     print("Sleep Query Count(No Data) Error, Set Error String")
                     let errorSleepString = "\(Int(start.timeIntervalSince1970)),\(Int(endDate.timeIntervalSince1970)),iPhone,0"
@@ -322,7 +321,7 @@ class HealthKitManager {
     // 어제 하루의 심박 수를 가져오는 메소드
     func getHeartRatePerDay(startDate: Date, endDate: Date) {
         guard let heartRateType = HKQuantityType.quantityType(forIdentifier: .heartRate) else { return }
-        let startDate = Calendar.current.startOfDay(for: endDate)
+        let startDate = Calendar.current.startOfDay(for: startDate)
         print(startDate)
         
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
@@ -335,7 +334,7 @@ class HealthKitManager {
                 return
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 15) {
                 if result?.count == 0 {
                     print("HeartRate Query Count(No Data) Error, Set Error String")
                     let errorHeartRateString = "\(startDate.timeIntervalSince1970),\(endDate.timeIntervalSince1970),iPhone,0"
@@ -356,7 +355,7 @@ class HealthKitManager {
                     let printResultToQuantity: HKQuantitySample = newData as! HKQuantitySample
                     let collectedHeartRateData = Int(printResultToQuantity.quantity.doubleValue(for: .count().unitDivided(by: .minute())))
                     
-                    let newHeartRateData = "\(startCollectTime),\(endCollectTime),\(collectDevice!),\(collectedHeartRateData)"
+                    let newHeartRateData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedHeartRateData)"
                     
                     self.heartRateStringDataArray.append(newHeartRateData)
                 }
@@ -366,45 +365,71 @@ class HealthKitManager {
         healthStore.execute(query)
     }
     
-    // Health CSV 파일을 만들고 업로드하는 메소드
-    func makeHealthCSVFileAndUpload(startDate: Date, endDate: Date) {
-        print("Start save and upload health data")
+    func queryingStepCount(startDate: Date, endDate: Date) {
+        print("Get stepCount data with health query")
         print("Test start date = \(startDate) | Test end date = \(endDate)")
-        
-//        self.getStepCountPerDay(startDate: startDate, endDate: endDate)
-//        self.getActiveEnergyPerDay(startDate: startDate, endDate: endDate)
-//        self.getDistanceWalkAndRunPerDay(startDate: startDate, endDate: endDate)
+        self.getStepCountPerDay(startDate: startDate, endDate: endDate)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 25) {
+            self.makeHealthDataCSV(dataType: "steps")
+        }
+    }
+    
+    func queryingEnergyCount(startDate: Date, endDate: Date) {
+        print("Get activeEnergyBurned data with health query")
+        print("Test start date = \(startDate) | Test end date = \(endDate)")
+        self.getActiveEnergyPerDay(startDate: startDate, endDate: endDate)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 25) {
+            self.makeHealthDataCSV(dataType: "calories")
+        }
+    }
+    
+    func queryingDistanceCount(startDate: Date, endDate: Date) {
+        print("Get distanceWalkingRunning data with health query")
+        print("Test start date = \(startDate) | Test end date = \(endDate)")
+        self.getDistanceWalkAndRunPerDay(startDate: startDate, endDate: endDate)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 25) {
+            self.makeHealthDataCSV(dataType: "distance")
+        }
+    }
+    
+    func queryingSleepCount(startDate: Date, endDate: Date) {
+        print("Get sleepAnalysis data with health query")
+        print("Test start date = \(startDate) | Test end date = \(endDate)")
+        self.getSleepPerDay(start: startDate, endDate: endDate)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 25) {
+            self.makeHealthDataCSV(dataType: "sleep")
+        }
+    }
+    
+    func queryingHRCount(startDate: Date, endDate: Date) {
+        print("Get heartRate data with health query")
+        print("Test start date = \(startDate) | Test end date = \(endDate)")
         self.getHeartRatePerDay(startDate: startDate, endDate: endDate)
-//        self.getSleepPerDay(start: startDate, endDate: endDate)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-//            for array in self.healthContainerNameArray {
-//                self.makeHealthDataCSV(dataType: array)
-//            }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 25) {
             self.makeHealthDataCSV(dataType: "HR")
-            
-//            self.stepStringToUpload = ""
-//            self.energyStringToUpload = ""
-//            self.distanceStringToUpload = ""
-            self.heartRateStringToUpload = ""
-//            self.sleepStringToUpload = ""
         }
     }
     
     // 받아온 건강 정보들을 CSV 파일(문자열)로 만드는 메소드
     func makeHealthDataCSV(dataType: String) {
         if dataType == "steps" {
-            print("StepStringArray = \(stepStringDataArray.count)")
+            print("StepStringDataArray = \(stepStringDataArray.count)")
             
             if stepStringDataArray.count > 0 {
                 for dataIndex in 0..<self.stepStringDataArray.count {
                     if dataIndex % 4000 == 0 {
+                        if dataIndex==0 {
+                            self.stepStringToUpload += self.stepStringDataArray[dataIndex] + ","
+                            continue
+                        }
                         self.stepStringArray.append(stepStringToUpload)
                         stepStringToUpload = ""
                     }
                     
                     if dataIndex == self.stepStringDataArray.count-1 {
                         self.stepStringToUpload += self.stepStringDataArray[dataIndex]
+                        self.stepStringArray.append(stepStringToUpload)
+                        stepStringToUpload = ""
                         break
                     }
                     
@@ -415,24 +440,32 @@ class HealthKitManager {
             if stepStringArray.count > 0 {
                 for i in 0..<self.stepStringArray.count {
                     self.writeHealthCSV(healthData: self.stepStringArray[i], dataType: "steps", index: i)
+                    uploadCSVDataToMobius(csvData: stepStringArray[i], containerName: "steps", fileNumber: i)
                 }
             }
             
             stepDataArray.removeAll()
             stepStringDataArray.removeAll()
             stepStringArray.removeAll()
+            stepStringToUpload = ""
         } else if dataType == "calories" {
-            print("EnergyStringArray = \(energyStringDataArray.count)")
+            print("EnergyStringDataArray = \(energyStringDataArray.count)")
             
             if energyStringDataArray.count > 0 {
                 for dataIndex in 0..<self.energyStringDataArray.count {
                     if dataIndex % 4000 == 0 {
+                        if dataIndex==0 {
+                            self.energyStringToUpload += self.energyStringDataArray[dataIndex] + ","
+                            continue
+                        }
                         self.energyStringArray.append(energyStringToUpload)
                         energyStringToUpload = ""
                     }
                     
                     if dataIndex == self.energyStringDataArray.count-1 {
                         self.energyStringToUpload += self.energyStringDataArray[dataIndex]
+                        self.energyStringArray.append(energyStringToUpload)
+                        energyStringToUpload = ""
                         break
                     }
                     
@@ -443,6 +476,7 @@ class HealthKitManager {
             if energyStringArray.count > 0 {
                 for i in 0..<energyStringArray.count {
                     self.writeHealthCSV(healthData: self.energyStringArray[i], dataType: "calories", index: i)
+                    uploadCSVDataToMobius(csvData: energyStringArray[i], containerName: "calories", fileNumber: i)
                 }
             }
             
@@ -450,17 +484,23 @@ class HealthKitManager {
             energyStringDataArray.removeAll()
             energyStringArray.removeAll()
         } else if dataType == "distance" {
-            print("DistanceStringArray = \(distanceStringDataArray.count)")
+            print("DistanceStringDataArray = \(distanceStringDataArray.count)")
             
             if distanceStringDataArray.count > 0 {
                 for dataIndex in 0..<self.distanceStringDataArray.count {
                     if dataIndex % 4000 == 0 {
+                        if dataIndex==0 {
+                            self.distanceStringToUpload += self.distanceStringDataArray[dataIndex] + ","
+                            continue
+                        }
                         self.distanceStringArray.append(distanceStringToUpload)
                         distanceStringToUpload = ""
                     }
                     
                     if dataIndex == self.distanceStringDataArray.count-1 {
-                        self.energyStringToUpload += self.distanceStringDataArray[dataIndex]
+                        self.distanceStringToUpload += self.distanceStringDataArray[dataIndex]
+                        self.distanceStringArray.append(distanceStringToUpload)
+                        distanceStringToUpload = ""
                         break
                     }
                     
@@ -471,6 +511,7 @@ class HealthKitManager {
             if distanceStringArray.count > 0 {
                 for i in 0..<distanceStringArray.count {
                     self.writeHealthCSV(healthData: self.distanceStringArray[i], dataType: "distance", index: i)
+                    uploadCSVDataToMobius(csvData: distanceStringArray[i], containerName: "distance", fileNumber: i)
                 }
             }
             
@@ -478,17 +519,23 @@ class HealthKitManager {
             distanceStringDataArray.removeAll()
             distanceStringArray.removeAll()
         } else if dataType == "sleep" {
-            print("SleepStringArray = \(sleepStringDataArray.count)")
+            print("SleepStringDataArray = \(sleepStringDataArray.count)")
             
             if sleepStringDataArray.count > 0 {
                 for dataIndex in 0..<self.sleepStringDataArray.count {
                     if dataIndex % 4000 == 0 {
+                        if dataIndex==0 {
+                            self.sleepStringToUpload += self.sleepStringDataArray[dataIndex] + ","
+                            continue
+                        }
                         self.sleepStringArray.append(sleepStringToUpload)
                         sleepStringToUpload = ""
                     }
                     
                     if dataIndex == self.sleepStringDataArray.count-1 {
                         self.sleepStringToUpload += self.sleepStringDataArray[dataIndex]
+                        self.sleepStringArray.append(sleepStringToUpload)
+                        sleepStringToUpload = ""
                         break
                     }
                     
@@ -499,6 +546,7 @@ class HealthKitManager {
             if sleepStringArray.count > 0 {
                 for i in 0..<sleepStringArray.count {
                     self.writeHealthCSV(healthData: sleepStringArray[i], dataType: "sleep", index: i)
+                    uploadCSVDataToMobius(csvData: sleepStringArray[i], containerName: "sleep", fileNumber: i)
                 }
             }
             
@@ -506,17 +554,23 @@ class HealthKitManager {
             sleepStringDataArray.removeAll()
             sleepStringArray.removeAll()
         } else if dataType == "HR" {
-            print("HeartRateStringArray = \(heartRateStringDataArray.count)")
+            print("HeartRateStringDataArray = \(heartRateStringDataArray.count)")
             
             if heartRateStringDataArray.count > 0 {
                 for dataIndex in 0..<self.heartRateStringDataArray.count {
                     if dataIndex % 4000 == 0 {
+                        if dataIndex==0 {
+                            self.heartRateStringToUpload += self.heartRateStringDataArray[dataIndex] + ","
+                            continue
+                        }
                         self.heartRateStringArray.append(heartRateStringToUpload)
                         heartRateStringToUpload = ""
                     }
                     
                     if dataIndex == self.heartRateStringDataArray.count-1 {
                         self.heartRateStringToUpload += self.heartRateStringDataArray[dataIndex]
+                        self.heartRateStringArray.append(heartRateStringToUpload)
+                        heartRateStringToUpload = ""
                         break
                     }
                     
@@ -527,6 +581,7 @@ class HealthKitManager {
             if heartRateStringArray.count > 0 {
                 for i in 0..<heartRateStringArray.count {
                     self.writeHealthCSV(healthData: heartRateStringArray[i], dataType: "HR", index: i)
+                    uploadCSVDataToMobius(csvData: heartRateStringArray[i], containerName: "HR", fileNumber: i)
                 }
             }
             
@@ -536,10 +591,92 @@ class HealthKitManager {
         }
     }
     
+    // Mobius 서버에 CSV 파일을 업로드하는 메소드
+    private func uploadCSVDataToMobius(csvData: String, containerName: String, fileNumber: Int) {
+        let semaphore = DispatchSemaphore (value: 0)
+        
+        let parameters = "{\n    \"m2m:cin\": {\n        \"con\": \"\(csvData)\"\n    }\n}"
+        let postData = parameters.data(using: .utf8)
+        
+        let userID = UserDefaults.standard.string(forKey: "UserID")!
+        var mainContainerName: String = ""
+        
+        if containerName == "mAcc" || containerName == "mGyr" || containerName == "mPre" {
+            mainContainerName = "mobile"
+        } else if containerName == "steps" || containerName == "calories" || containerName == "distance" || containerName == "sleep" || containerName == "HR" {
+            mainContainerName = "health"
+        }
+        
+        let urlString = "http://114.71.220.59:7579/Mobius/\(userID)/\(mainContainerName)/\(containerName)"
+        print(urlString)
+        
+        var request = URLRequest(url: URL(string: urlString)!,timeoutInterval: Double.infinity)
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("12345", forHTTPHeaderField: "X-M2M-RI")
+        request.addValue("SIWLTfduOpL", forHTTPHeaderField: "X-M2M-Origin")
+        request.addValue("application/vnd.onem2m-res+json; ty=4", forHTTPHeaderField: "Content-Type")
+        
+        request.httpMethod = "POST"
+        request.httpBody = postData
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard data != nil else {
+                print(String(describing: error))
+                semaphore.signal()
+                return
+            }
+            
+            // POST 성공 여부 체크, POST 실패 시 return
+            let successsRange = 200..<300
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, successsRange.contains(statusCode)
+            else {
+                print("")
+                print("====================================")
+                print("[requestPOST : http post 요청 에러]")
+                print("error : ", (response as? HTTPURLResponse)?.statusCode ?? 0)
+                print("msg : ", (response as? HTTPURLResponse)?.description ?? "")
+                print("====================================")
+                print("")
+                return
+            }
+            
+            self.removeCSV(containerName: containerName, index: fileNumber)
+            
+            print("\(containerName) Data is served.")
+            semaphore.signal()
+        }
+        
+        task.resume()
+        semaphore.wait()
+    }
+    
+    private func removeCSV(containerName: String, index: Int) {
+        let fileManager: FileManager = FileManager.default
+        
+        var folderName = ""
+        
+        if containerName == "mAcc" || containerName == "mGyr" || containerName == "mPre" {
+            folderName = "saveSensorCSVFolder"
+        } else if containerName == "steps" || containerName == "calories" || containerName == "distance" || containerName == "sleep" || containerName == "HR" {
+            folderName = "saveHealthCSVFolder"
+        }
+        
+        let csvFileName = "\(containerName)_\(index).csv"
+        
+        let documentUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let diretoryUrl = documentUrl.appendingPathComponent(folderName)
+        let fileUrl = diretoryUrl.appendingPathComponent(csvFileName)
+        
+        do {
+            try fileManager.removeItem(at: fileUrl)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = paths[0]
         return documentsDirectory
     }
-    
 }

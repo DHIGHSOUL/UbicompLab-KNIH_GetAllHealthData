@@ -24,3 +24,12 @@ IDLength3 = "Only 3 numbers are allowed for ID";
 typeAgain = "Please enter it again";
 signInComplete = "Success to sign in!";
 restartRequest = "App will terminate. Please restart the app!";
+noStartDateString = "Start date is not set";
+noEndDateString = "End date is not set";
+
+// MARK: - UploadViewWord
+uploadHRButton = "HeartRate";
+uploadStepButton = "StepCount";
+uploadEnergyButton = "Calorie";
+uploadDistanceButton = "Distance";
+uploadSleepButton = "Sleep";
