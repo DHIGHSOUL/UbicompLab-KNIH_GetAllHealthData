@@ -17,38 +17,58 @@ class HealthKitManager {
     // MARK: - Instance member
     // 걸음 수 데이터를 HKSample 형식으로 받아들일 배열, 받아들인 배열 구조를 업로드할 구조로 재구성할(startDate, endTime, data) 배열, 업로드를 위한 문자열
     var stepDataArray: [HKSample] = []
-    var stepStringDataArray: [String] = []
-    var stepStringToUpload = ""
-    var stepStringArray: [String] = []
-    var stepCSVIndex: Int = 0
+    var iPhoneStepStringDataArray: [String] = []
+    var AWatchStepStringDataArray: [String] = []
+    var iPhoneStepStringToUpload = ""
+    var AWatchStepStringToUpload = ""
+    var iPhoneStepStringArray: [String] = []
+    var AWatchStepStringArray: [String] = []
+    var iPhoneStepCSVIndex: Int = 0
+    var AWatchStepCSVIndex: Int = 0
     
     // 활성 에너지 수 데이터를 HKSample 형식으로 받아들일 배열, 받아들인 배열 구조를 업로드할 구조로 재구성할(startDate, endTime, data) 배열, 업로드를 위한 문자열
     var energyDataArray: [HKSample] = []
-    var energyStringDataArray: [String] = []
-    var energyStringToUpload = ""
-    var energyStringArray: [String] = []
-    var energyCSVIndex: Int = 0
+    var iPhoneEnergyStringDataArray: [String] = []
+    var AWatchEnergyStringDataArray: [String] = []
+    var iPhoneEnergyStringToUpload = ""
+    var AWatchEnergyStringToUpload = ""
+    var iPhoneEnergyStringArray: [String] = []
+    var AWatchEnergyStringArray: [String] = []
+    var iPhoneEnergyCSVIndex: Int = 0
+    var AWatchEnergyCSVIndex: Int = 0
     
     // 걷고 뛴 거리 데이터를 HKSample 형식으로 받아들일 배열, 받아들인 배열 구조를 업로드할 구조로 재구성할(startDate, endTime, data) 배열, 업로드를 위한 문자열
     var distanceDataArray: [HKSample] = []
-    var distanceStringDataArray: [String] = []
-    var distanceStringToUpload = ""
-    var distanceStringArray: [String] = []
-    var distanceCSVIndex: Int = 0
+    var iPhoneDistanceStringDataArray: [String] = []
+    var AWatchDistanceStringDataArray: [String] = []
+    var iPhoneDistanceStringToUpload = ""
+    var AWatchDistanceStringToUpload = ""
+    var iPhoneDistanceStringArray: [String] = []
+    var AWatchDistanceStringArray: [String] = []
+    var iPhoneDistanceCSVIndex: Int = 0
+    var AWatchDistanceCSVIndex: Int = 0
     
     // 수면 데이터를 HKSample 형식으로 받아들일 배열, 받아들인 배열 구조를 업로드할 구조로 재구성할(startDate, endTime, data) 배열, 업로드를 위한 문자열
     var sleepDataArray: [HKCategorySample] = []
-    var sleepStringDataArray: [String] = []
-    var sleepStringToUpload = ""
-    var sleepStringArray: [String] = []
-    var sleepCSVIndex: Int = 0
+    var iPhoneSleepStringDataArray: [String] = []
+    var AWatchSleepStringDataArray: [String] = []
+    var iPhoneSleepStringToUpload = ""
+    var AWatchSleepStringToUpload = ""
+    var iPhoneSleepStringArray: [String] = []
+    var AWatchSleepStringArray: [String] = []
+    var iPhoneSleepCSVIndex: Int = 0
+    var AWatchSleepCSVIndex: Int = 0
     
     // 심박수 데이터를 HKSample 형식으로 받아들일 배열, 받아들인 배열 구조를 업로드할 구조로 재구성할(startDate, endTime, data) 배열, 업로드를 위한 문자열
     var heartRateDataArray: [HKSample] = []
-    var heartRateStringDataArray: [String] = []
-    var heartRateStringToUpload = ""
-    var heartRateStringArray: [String] = []
-    var heartRateCSVIndex: Int = 0
+    var iPhoneHeartRateStringDataArray: [String] = []
+    var AWatchHeartRateStringDataArray: [String] = []
+    var iPhoneHeartRateStringToUpload = ""
+    var AWatchHeartRateStringToUpload = ""
+    var iPhoneHeartRateStringArray: [String] = []
+    var AWatchHeartRateStringArray: [String] = []
+    var iPhoneHeartRateCSVIndex: Int = 0
+    var AWatchHeartRateCSVIndex: Int = 0
     
     // Health 데이터의 컨테이너 이름 배열
     let healthContainerNameArray: [String] = ["steps", "calories", "distance", "sleep", "HR"]
@@ -81,12 +101,12 @@ class HealthKitManager {
     }
     
     // 건강 데이터를 CSV 파일에 저장하는 메소드
-    func writeHealthCSV(healthData: String, dataType: String, index: Int) {
+    func writeHealthCSV(healthData: String, deviceType: String, dataType: String, index: Int) {
         let fileManager = FileManager.default
         
-        print("\(dataType)_\(index).csv 파일 생성됨")
+        print("\(deviceType)_\(dataType)_\(index).csv 파일 생성됨")
         let folderName = "healthCSVFolder"
-        let csvFileName = "\(dataType)_\(index).csv"
+        let csvFileName = "\(deviceType)_\(dataType)_\(index).csv"
         
         let documentUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
         let directoryUrl = documentUrl.appendingPathComponent(folderName)
@@ -146,7 +166,7 @@ class HealthKitManager {
             if let error = error {
                 print("Step Query Error, Set Error String : \(error.localizedDescription)")
                 let errorStepString = "\(Int(startTime.timeIntervalSince1970)),\(Int(endTime.timeIntervalSince1970)),iPhone,-1"
-                self.stepStringDataArray.append(errorStepString)
+                self.iPhoneStepStringDataArray.append(errorStepString)
                 return
             }
             
@@ -154,7 +174,7 @@ class HealthKitManager {
                 if result?.count == 0 {
                     print("Step Query Count(No Data) Error, Set Error String")
                     let errorStepString = "\(Int(startTime.timeIntervalSince1970)),\(Int(endTime.timeIntervalSince1970)),iPhone,0"
-                    self.stepStringDataArray.append(errorStepString)
+                    self.iPhoneStepStringDataArray.append(errorStepString)
                     return
                 } else if let results = result {
                     print("Step Query No Error, Start Appending Results In Array")
@@ -170,10 +190,13 @@ class HealthKitManager {
                     let collectDevice = newData.device?.model
                     let printResultToQuantity: HKQuantitySample = newData as! HKQuantitySample
                     let collectedStepData = Int(printResultToQuantity.quantity.doubleValue(for: .count()))
-                    
-                    let newStepData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedStepData)"
-                    
-                    self.stepStringDataArray.append(newStepData)
+                    if collectDevice == "iPhone" {
+                        let newStepData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedStepData)"
+                        self.iPhoneStepStringDataArray.append(newStepData)
+                    } else if collectDevice == "Watch" {
+                        let newStepData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedStepData)"
+                        self.AWatchStepStringDataArray.append(newStepData)
+                    }
                 }
             }
         }
@@ -191,7 +214,7 @@ class HealthKitManager {
             if let error = error {
                 print("Energy Query Error, Set Error String : \(error.localizedDescription)")
                 let errorEnergyString = "\(Int(startDate.timeIntervalSince1970)),\(Int(endDate.timeIntervalSince1970)),iPhone,-1"
-                self.energyStringDataArray.append(errorEnergyString)
+                self.iPhoneEnergyStringDataArray.append(errorEnergyString)
                 return
             }
             
@@ -199,7 +222,7 @@ class HealthKitManager {
                 if result?.count == 0 {
                     print("Energy Query Count(No Data) Error, Set Error String")
                     let errorEnergyString = "\(Int(startDate.timeIntervalSince1970)),\(Int(endDate.timeIntervalSince1970)),iPhone,0"
-                    self.energyStringDataArray.append(errorEnergyString)
+                    self.iPhoneEnergyStringDataArray.append(errorEnergyString)
                     return
                 } else if let results = result {
                     print("Energy Query No Error, Start Appending Results In Array")
@@ -215,9 +238,13 @@ class HealthKitManager {
                     let collectDevice = newData.device?.model
                     let printResultToQuantity: HKQuantitySample = newData as! HKQuantitySample
                     let collectedEnergyData = Int(printResultToQuantity.quantity.doubleValue(for: .smallCalorie()))
-                    
-                    let newEnergyData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedEnergyData)"
-                    self.energyStringDataArray.append(newEnergyData)
+                    if collectDevice == "iPhone" {
+                        let newEnergyData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedEnergyData)"
+                        self.iPhoneEnergyStringDataArray.append(newEnergyData)
+                    } else if collectDevice == "Watch" {
+                        let newEnergyData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedEnergyData)"
+                        self.AWatchEnergyStringDataArray.append(newEnergyData)
+                    }
                 }
             }
         }
@@ -235,7 +262,7 @@ class HealthKitManager {
             if let error = error {
                 print("Distance Query Error, Set Error String : \(error.localizedDescription)")
                 let errorDistanceString = "\(Int(startDate.timeIntervalSince1970)),\(Int(endDate.timeIntervalSince1970)),iPhone,-1"
-                self.distanceStringDataArray.append(errorDistanceString)
+                self.iPhoneDistanceStringDataArray.append(errorDistanceString)
                 return
             }
             
@@ -243,7 +270,7 @@ class HealthKitManager {
                 if result?.count == 0 {
                     print("Distance Query Count(No Data) Error, Set Error String")
                     let errorDistanceString = "\(Int(startDate.timeIntervalSince1970)),\(Int(endDate.timeIntervalSince1970)),iPhone,0"
-                    self.distanceStringDataArray.append(errorDistanceString)
+                    self.iPhoneDistanceStringDataArray.append(errorDistanceString)
                     return
                 } else if let results = result {
                     print("Distance Query No Error, Start Appending Results In Array")
@@ -259,10 +286,13 @@ class HealthKitManager {
                     let collectDevice = newData.device?.model
                     let printResultToQuantity: HKQuantitySample = newData as! HKQuantitySample
                     let collectedDistanceData = Int(printResultToQuantity.quantity.doubleValue(for: .meter()) * 1000)
-                    
-                    let newDistanceData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedDistanceData)"
-                    
-                    self.distanceStringDataArray.append(newDistanceData)
+                    if collectDevice == "iPhone" {
+                        let newDistanceData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedDistanceData)"
+                        self.iPhoneDistanceStringDataArray.append(newDistanceData)
+                    } else if collectDevice == "Watch" {
+                        let newDistanceData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedDistanceData)"
+                        self.AWatchDistanceStringDataArray.append(newDistanceData)
+                    }
                 }
             }
         }
@@ -279,7 +309,7 @@ class HealthKitManager {
             if let error = error {
                 print("Sleep Query Error, Set Error String : \(error.localizedDescription)")
                 let errorSleepString = "\(Int(start.timeIntervalSince1970)),\(Int(endDate.timeIntervalSince1970)),iPhone,-1"
-                self?.sleepStringDataArray.append(errorSleepString)
+                self?.iPhoneSleepStringDataArray.append(errorSleepString)
                 return
             }
             
@@ -287,7 +317,7 @@ class HealthKitManager {
                 if result?.count == 0 {
                     print("Sleep Query Count(No Data) Error, Set Error String")
                     let errorSleepString = "\(Int(start.timeIntervalSince1970)),\(Int(endDate.timeIntervalSince1970)),iPhone,0"
-                    self?.sleepStringDataArray.append(errorSleepString)
+                    self?.iPhoneSleepStringDataArray.append(errorSleepString)
                     return
                 } else if let results = result {
                     print("Sleep Query No Error, Start Appending Results In Array")
@@ -304,13 +334,15 @@ class HealthKitManager {
                     var collectDevice = ""
                     if collectDeviceNumber == 0 {
                         collectDevice = "iPhone"
+                        let collectedSleepTimeData =  Int(newData.endDate.timeIntervalSince(newData.startDate))
+                        let newSleepData = "\(startCollectTime),\(endCollectTime),\(collectDevice),\(collectedSleepTimeData)"
+                        self?.iPhoneSleepStringDataArray.append(newSleepData)
                     } else if collectDeviceNumber == 1 {
                         collectDevice = "Watch"
+                        let collectedSleepTimeData =  Int(newData.endDate.timeIntervalSince(newData.startDate))
+                        let newSleepData = "\(startCollectTime),\(endCollectTime),\(collectDevice),\(collectedSleepTimeData)"
+                        self?.AWatchSleepStringDataArray.append(newSleepData)
                     }
-                    let collectedSleepTimeData =  Int(newData.endDate.timeIntervalSince(newData.startDate))
-                    let newSleepData = "\(startCollectTime),\(endCollectTime),\(collectDevice),\(collectedSleepTimeData)"
-                    
-                    self?.sleepStringDataArray.append(newSleepData)
                 }
             }
         }
@@ -330,7 +362,7 @@ class HealthKitManager {
             if let error = error {
                 print("HeartRate Query Error, Set Error String : \(error.localizedDescription)")
                 let errorHeartRateString = "\(Int(startDate.timeIntervalSince1970)),\(Int(endDate.timeIntervalSince1970)),iPhone,-1"
-                self.heartRateStringDataArray.append(errorHeartRateString)
+                self.iPhoneHeartRateStringDataArray.append(errorHeartRateString)
                 return
             }
             
@@ -338,7 +370,7 @@ class HealthKitManager {
                 if result?.count == 0 {
                     print("HeartRate Query Count(No Data) Error, Set Error String")
                     let errorHeartRateString = "\(startDate.timeIntervalSince1970),\(endDate.timeIntervalSince1970),iPhone,0"
-                    self.heartRateStringDataArray.append(errorHeartRateString)
+                    self.iPhoneHeartRateStringDataArray.append(errorHeartRateString)
                     return
                 } else if let results = result {
                     print("HeartRate Query No Error, Start Appending Results In Array")
@@ -354,10 +386,13 @@ class HealthKitManager {
                     let collectDevice = newData.device?.model
                     let printResultToQuantity: HKQuantitySample = newData as! HKQuantitySample
                     let collectedHeartRateData = Int(printResultToQuantity.quantity.doubleValue(for: .count().unitDivided(by: .minute())))
-                    
-                    let newHeartRateData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedHeartRateData)"
-                    
-                    self.heartRateStringDataArray.append(newHeartRateData)
+                    if collectDevice == "iPhone" {
+                        let newHeartRateData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedHeartRateData)"
+                        self.iPhoneHeartRateStringDataArray.append(newHeartRateData)
+                    } else if collectDevice == "Watch" {
+                        let newHeartRateData = "\(startCollectTime),\(endCollectTime),\(collectDevice ?? "Error"),\(collectedHeartRateData)"
+                        self.AWatchHeartRateStringDataArray.append(newHeartRateData)
+                    }
                 }
             }
         }
@@ -413,201 +448,365 @@ class HealthKitManager {
     // 받아온 건강 정보들을 CSV 파일(문자열)로 만드는 메소드
     func makeHealthDataCSV(dataType: String) {
         if dataType == "steps" {
-            print("StepStringDataArray = \(stepStringDataArray.count)")
+            print("iPhoneStepStringDataArray = \(iPhoneStepStringDataArray.count)")
+            print("AWatchStepStringDataArray = \(AWatchStepStringDataArray.count)")
             
-            if stepStringDataArray.count > 0 {
-                for dataIndex in 0..<self.stepStringDataArray.count {
+            if iPhoneStepStringDataArray.count > 0 {
+                for dataIndex in 0..<self.iPhoneStepStringDataArray.count {
                     if dataIndex % 4000 == 0 {
                         if dataIndex==0 {
-                            self.stepStringToUpload += self.stepStringDataArray[dataIndex] + ","
+                            self.iPhoneStepStringToUpload += self.iPhoneStepStringDataArray[dataIndex] + ","
                             continue
                         }
-                        self.stepStringArray.append(stepStringToUpload)
-                        stepStringToUpload = ""
+                        self.iPhoneStepStringArray.append(iPhoneStepStringToUpload)
+                        iPhoneStepStringToUpload = ""
                     }
                     
-                    if dataIndex == self.stepStringDataArray.count-1 {
-                        self.stepStringToUpload += self.stepStringDataArray[dataIndex]
-                        self.stepStringArray.append(stepStringToUpload)
-                        stepStringToUpload = ""
+                    if dataIndex == self.iPhoneStepStringDataArray.count-1 {
+                        self.iPhoneStepStringToUpload += self.iPhoneStepStringDataArray[dataIndex]
+                        self.iPhoneStepStringArray.append(iPhoneStepStringToUpload)
+                        iPhoneStepStringToUpload = ""
                         break
                     }
                     
-                    self.stepStringToUpload += self.stepStringDataArray[dataIndex] + ","
+                    self.iPhoneStepStringToUpload += self.iPhoneStepStringDataArray[dataIndex] + ","
                 }
             }
             
-            if stepStringArray.count > 0 {
-                for i in 0..<self.stepStringArray.count {
-                    self.writeHealthCSV(healthData: self.stepStringArray[i], dataType: "steps", index: i)
-                    uploadCSVDataToMobius(csvData: stepStringArray[i], containerName: "steps", fileNumber: i)
+            if AWatchStepStringDataArray.count > 0 {
+                for dataIndex in 0..<self.AWatchStepStringDataArray.count {
+                    if dataIndex % 4000 == 0 {
+                        if dataIndex==0 {
+                            self.AWatchStepStringToUpload += self.AWatchStepStringDataArray[dataIndex] + ","
+                            continue
+                        }
+                        self.AWatchStepStringArray.append(AWatchStepStringToUpload)
+                        AWatchStepStringToUpload = ""
+                    }
+                    
+                    if dataIndex == self.AWatchStepStringDataArray.count-1 {
+                        self.AWatchStepStringToUpload += self.AWatchStepStringDataArray[dataIndex]
+                        self.AWatchStepStringArray.append(AWatchStepStringToUpload)
+                        AWatchStepStringToUpload = ""
+                        break
+                    }
+                    
+                    self.AWatchStepStringToUpload += self.AWatchStepStringDataArray[dataIndex] + ","
+                }
+            }
+            
+            if iPhoneStepStringArray.count > 0 {
+                for i in 0..<self.iPhoneStepStringArray.count {
+                    self.writeHealthCSV(healthData: self.iPhoneStepStringArray[i], deviceType: "iphone", dataType: "steps", index: i)
+                    uploadCSVDataToMobius(csvData: iPhoneStepStringArray[i], deviceType: "iphone", containerName: "steps", fileNumber: i)
+                }
+            }
+            
+            if AWatchStepStringArray.count > 0 {
+                for i in 0..<self.AWatchStepStringArray.count {
+                    self.writeHealthCSV(healthData: self.AWatchStepStringArray[i], deviceType: "watch", dataType: "steps", index: i)
+                    uploadCSVDataToMobius(csvData: AWatchStepStringArray[i], deviceType: "watch", containerName: "steps", fileNumber: i)
                 }
             }
             
             stepDataArray.removeAll()
-            stepStringDataArray.removeAll()
-            stepStringArray.removeAll()
-            stepStringToUpload = ""
+            iPhoneStepStringDataArray.removeAll()
+            AWatchStepStringDataArray.removeAll()
+            iPhoneStepStringArray.removeAll()
+            AWatchStepStringArray.removeAll()
+            iPhoneStepStringToUpload = ""
+            AWatchStepStringToUpload = ""
         } else if dataType == "calories" {
-            print("EnergyStringDataArray = \(energyStringDataArray.count)")
+            print("iPhoneEnergyStringDataArray = \(iPhoneEnergyStringDataArray.count)")
+            print("AWatchEnergyStringDataArray = \(AWatchEnergyStringDataArray.count)")
             
-            if energyStringDataArray.count > 0 {
-                for dataIndex in 0..<self.energyStringDataArray.count {
+            if iPhoneEnergyStringDataArray.count > 0 {
+                for dataIndex in 0..<self.iPhoneEnergyStringDataArray.count {
                     if dataIndex % 4000 == 0 {
                         if dataIndex==0 {
-                            self.energyStringToUpload += self.energyStringDataArray[dataIndex] + ","
+                            self.iPhoneEnergyStringToUpload += self.iPhoneEnergyStringDataArray[dataIndex] + ","
                             continue
                         }
-                        self.energyStringArray.append(energyStringToUpload)
-                        energyStringToUpload = ""
+                        self.iPhoneEnergyStringArray.append(iPhoneEnergyStringToUpload)
+                        iPhoneEnergyStringToUpload = ""
                     }
                     
-                    if dataIndex == self.energyStringDataArray.count-1 {
-                        self.energyStringToUpload += self.energyStringDataArray[dataIndex]
-                        self.energyStringArray.append(energyStringToUpload)
-                        energyStringToUpload = ""
+                    if dataIndex == self.iPhoneEnergyStringDataArray.count-1 {
+                        self.iPhoneEnergyStringToUpload += self.iPhoneEnergyStringDataArray[dataIndex]
+                        self.iPhoneEnergyStringArray.append(iPhoneEnergyStringToUpload)
+                        iPhoneEnergyStringToUpload = ""
                         break
                     }
                     
-                    self.energyStringToUpload += self.energyStringDataArray[dataIndex] + ","
+                    self.iPhoneEnergyStringToUpload += self.iPhoneEnergyStringDataArray[dataIndex] + ","
                 }
             }
             
-            if energyStringArray.count > 0 {
-                for i in 0..<energyStringArray.count {
-                    self.writeHealthCSV(healthData: self.energyStringArray[i], dataType: "calories", index: i)
-                    uploadCSVDataToMobius(csvData: energyStringArray[i], containerName: "calories", fileNumber: i)
+            if AWatchEnergyStringDataArray.count > 0 {
+                for dataIndex in 0..<self.AWatchEnergyStringDataArray.count {
+                    if dataIndex % 4000 == 0 {
+                        if dataIndex==0 {
+                            self.AWatchEnergyStringToUpload += self.AWatchEnergyStringDataArray[dataIndex] + ","
+                            continue
+                        }
+                        self.AWatchEnergyStringArray.append(AWatchEnergyStringToUpload)
+                        AWatchEnergyStringToUpload = ""
+                    }
+                    
+                    if dataIndex == self.AWatchEnergyStringDataArray.count-1 {
+                        self.AWatchEnergyStringToUpload += self.AWatchEnergyStringDataArray[dataIndex]
+                        self.AWatchEnergyStringArray.append(AWatchEnergyStringToUpload)
+                        AWatchEnergyStringToUpload = ""
+                        break
+                    }
+                    
+                    self.AWatchEnergyStringToUpload += self.AWatchEnergyStringDataArray[dataIndex] + ","
+                }
+            }
+            
+            if iPhoneEnergyStringArray.count > 0 {
+                for i in 0..<iPhoneEnergyStringArray.count {
+                    self.writeHealthCSV(healthData: self.iPhoneEnergyStringArray[i], deviceType: "iphone", dataType: "calories", index: i)
+                    uploadCSVDataToMobius(csvData: iPhoneEnergyStringArray[i], deviceType: "iphone", containerName: "calories", fileNumber: i)
+                }
+            }
+            
+            if AWatchEnergyStringArray.count > 0 {
+                for i in 0..<self.AWatchEnergyStringArray.count {
+                    self.writeHealthCSV(healthData: self.AWatchEnergyStringArray[i], deviceType: "watch", dataType: "calories", index: i)
+                    uploadCSVDataToMobius(csvData: AWatchEnergyStringArray[i], deviceType: "watch", containerName: "calories", fileNumber: i)
                 }
             }
             
             energyDataArray.removeAll()
-            energyStringDataArray.removeAll()
-            energyStringArray.removeAll()
+            iPhoneEnergyStringDataArray.removeAll()
+            AWatchEnergyStringDataArray.removeAll()
+            iPhoneEnergyStringArray.removeAll()
+            AWatchEnergyStringArray.removeAll()
+            iPhoneEnergyStringToUpload = ""
+            AWatchEnergyStringToUpload = ""
         } else if dataType == "distance" {
-            print("DistanceStringDataArray = \(distanceStringDataArray.count)")
+            print("iPhoneDistanceStringDataArray = \(iPhoneDistanceStringDataArray.count)")
+            print("AWatchDistanceStringDataArray = \(AWatchDistanceStringDataArray.count)")
             
-            if distanceStringDataArray.count > 0 {
-                for dataIndex in 0..<self.distanceStringDataArray.count {
+            if iPhoneDistanceStringDataArray.count > 0 {
+                for dataIndex in 0..<self.iPhoneDistanceStringDataArray.count {
                     if dataIndex % 4000 == 0 {
                         if dataIndex==0 {
-                            self.distanceStringToUpload += self.distanceStringDataArray[dataIndex] + ","
+                            self.iPhoneDistanceStringToUpload += self.iPhoneDistanceStringDataArray[dataIndex] + ","
                             continue
                         }
-                        self.distanceStringArray.append(distanceStringToUpload)
-                        distanceStringToUpload = ""
+                        self.iPhoneDistanceStringArray.append(iPhoneDistanceStringToUpload)
+                        iPhoneDistanceStringToUpload = ""
                     }
                     
-                    if dataIndex == self.distanceStringDataArray.count-1 {
-                        self.distanceStringToUpload += self.distanceStringDataArray[dataIndex]
-                        self.distanceStringArray.append(distanceStringToUpload)
-                        distanceStringToUpload = ""
+                    if dataIndex == self.iPhoneDistanceStringDataArray.count-1 {
+                        self.iPhoneDistanceStringToUpload += self.iPhoneDistanceStringDataArray[dataIndex]
+                        self.iPhoneDistanceStringArray.append(iPhoneDistanceStringToUpload)
+                        iPhoneDistanceStringToUpload = ""
                         break
                     }
                     
-                    self.distanceStringToUpload += self.distanceStringDataArray[dataIndex] + ","
+                    self.iPhoneDistanceStringToUpload += self.iPhoneDistanceStringDataArray[dataIndex] + ","
                 }
             }
             
-            if distanceStringArray.count > 0 {
-                for i in 0..<distanceStringArray.count {
-                    self.writeHealthCSV(healthData: self.distanceStringArray[i], dataType: "distance", index: i)
-                    uploadCSVDataToMobius(csvData: distanceStringArray[i], containerName: "distance", fileNumber: i)
+            if AWatchDistanceStringDataArray.count > 0 {
+                for dataIndex in 0..<self.AWatchDistanceStringDataArray.count {
+                    if dataIndex % 4000 == 0 {
+                        if dataIndex==0 {
+                            self.AWatchDistanceStringToUpload += self.AWatchDistanceStringDataArray[dataIndex] + ","
+                            continue
+                        }
+                        self.AWatchDistanceStringArray.append(AWatchDistanceStringToUpload)
+                        AWatchDistanceStringToUpload = ""
+                    }
+                    
+                    if dataIndex == self.AWatchDistanceStringDataArray.count-1 {
+                        self.AWatchDistanceStringToUpload += self.AWatchDistanceStringDataArray[dataIndex]
+                        self.AWatchDistanceStringArray.append(AWatchDistanceStringToUpload)
+                        AWatchDistanceStringToUpload = ""
+                        break
+                    }
+                    
+                    self.AWatchDistanceStringToUpload += self.AWatchDistanceStringDataArray[dataIndex] + ","
+                }
+            }
+            
+            if iPhoneDistanceStringArray.count > 0 {
+                for i in 0..<iPhoneDistanceStringArray.count {
+                    self.writeHealthCSV(healthData: self.iPhoneDistanceStringArray[i], deviceType: "iphone", dataType: "distance", index: i)
+                    uploadCSVDataToMobius(csvData: iPhoneDistanceStringArray[i], deviceType: "iphone", containerName: "distance", fileNumber: i)
+                }
+            }
+            
+            if AWatchDistanceStringArray.count > 0 {
+                for i in 0..<AWatchDistanceStringArray.count {
+                    self.writeHealthCSV(healthData: self.AWatchDistanceStringArray[i], deviceType: "watch", dataType: "distance", index: i)
+                    uploadCSVDataToMobius(csvData: AWatchDistanceStringArray[i], deviceType: "watch", containerName: "distance", fileNumber: i)
                 }
             }
             
             distanceDataArray.removeAll()
-            distanceStringDataArray.removeAll()
-            distanceStringArray.removeAll()
+            iPhoneDistanceStringDataArray.removeAll()
+            AWatchDistanceStringDataArray.removeAll()
+            iPhoneDistanceStringArray.removeAll()
+            AWatchDistanceStringArray.removeAll()
+            iPhoneDistanceStringToUpload = ""
+            AWatchDistanceStringToUpload = ""
         } else if dataType == "sleep" {
-            print("SleepStringDataArray = \(sleepStringDataArray.count)")
+            print("iPhoneSleepStringDataArray = \(iPhoneSleepStringDataArray.count)")
+            print("AWatchSleepStringDataArray = \(AWatchSleepStringDataArray.count)")
             
-            if sleepStringDataArray.count > 0 {
-                for dataIndex in 0..<self.sleepStringDataArray.count {
+            
+            if iPhoneSleepStringDataArray.count > 0 {
+                for dataIndex in 0..<self.iPhoneSleepStringDataArray.count {
                     if dataIndex % 4000 == 0 {
                         if dataIndex==0 {
-                            self.sleepStringToUpload += self.sleepStringDataArray[dataIndex] + ","
+                            self.iPhoneSleepStringToUpload += self.iPhoneSleepStringDataArray[dataIndex] + ","
                             continue
                         }
-                        self.sleepStringArray.append(sleepStringToUpload)
-                        sleepStringToUpload = ""
+                        self.iPhoneSleepStringArray.append(iPhoneSleepStringToUpload)
+                        iPhoneSleepStringToUpload = ""
                     }
                     
-                    if dataIndex == self.sleepStringDataArray.count-1 {
-                        self.sleepStringToUpload += self.sleepStringDataArray[dataIndex]
-                        self.sleepStringArray.append(sleepStringToUpload)
-                        sleepStringToUpload = ""
+                    if dataIndex == self.iPhoneSleepStringDataArray.count-1 {
+                        self.iPhoneSleepStringToUpload += self.iPhoneSleepStringDataArray[dataIndex]
+                        self.iPhoneSleepStringArray.append(iPhoneSleepStringToUpload)
+                        iPhoneSleepStringToUpload = ""
                         break
                     }
                     
-                    self.sleepStringToUpload += self.sleepStringDataArray[dataIndex] + ","
+                    self.iPhoneSleepStringToUpload += self.iPhoneSleepStringDataArray[dataIndex] + ","
                 }
             }
             
-            if sleepStringArray.count > 0 {
-                for i in 0..<sleepStringArray.count {
-                    self.writeHealthCSV(healthData: sleepStringArray[i], dataType: "sleep", index: i)
-                    uploadCSVDataToMobius(csvData: sleepStringArray[i], containerName: "sleep", fileNumber: i)
+            if AWatchSleepStringDataArray.count > 0 {
+                for dataIndex in 0..<self.AWatchSleepStringDataArray.count {
+                    if dataIndex % 4000 == 0 {
+                        if dataIndex==0 {
+                            self.AWatchSleepStringToUpload += self.AWatchSleepStringDataArray[dataIndex] + ","
+                            continue
+                        }
+                        self.AWatchSleepStringArray.append(AWatchSleepStringToUpload)
+                        AWatchSleepStringToUpload = ""
+                    }
+                    
+                    if dataIndex == self.AWatchSleepStringDataArray.count-1 {
+                        self.AWatchSleepStringToUpload += self.AWatchSleepStringDataArray[dataIndex]
+                        self.AWatchSleepStringArray.append(AWatchSleepStringToUpload)
+                        AWatchSleepStringToUpload = ""
+                        break
+                    }
+                    
+                    self.AWatchSleepStringToUpload += self.AWatchSleepStringDataArray[dataIndex] + ","
+                }
+            }
+            
+            if iPhoneSleepStringArray.count > 0 {
+                for i in 0..<iPhoneSleepStringArray.count {
+                    self.writeHealthCSV(healthData: iPhoneSleepStringArray[i], deviceType: "iphone", dataType: "sleep", index: i)
+                    uploadCSVDataToMobius(csvData: iPhoneSleepStringArray[i], deviceType: "iphone", containerName: "sleep", fileNumber: i)
+                }
+            }
+            
+            if AWatchSleepStringArray.count > 0 {
+                for i in 0..<AWatchSleepStringArray.count {
+                    self.writeHealthCSV(healthData: AWatchSleepStringArray[i], deviceType: "watch", dataType: "sleep", index: i)
+                    uploadCSVDataToMobius(csvData: AWatchSleepStringArray[i], deviceType: "watch", containerName: "sleep", fileNumber: i)
                 }
             }
             
             sleepDataArray.removeAll()
-            sleepStringDataArray.removeAll()
-            sleepStringArray.removeAll()
+            iPhoneSleepStringDataArray.removeAll()
+            AWatchSleepStringDataArray.removeAll()
+            iPhoneSleepStringArray.removeAll()
+            AWatchSleepStringArray.removeAll()
+            iPhoneSleepStringToUpload = ""
+            AWatchSleepStringToUpload = ""
         } else if dataType == "HR" {
-            print("HeartRateStringDataArray = \(heartRateStringDataArray.count)")
+            print("iPhoneHeartRateStringDataArray = \(iPhoneHeartRateStringDataArray.count)")
+            print("AWatchHeartRateStringDataArray = \(AWatchHeartRateStringDataArray.count)")
             
-            if heartRateStringDataArray.count > 0 {
-                for dataIndex in 0..<self.heartRateStringDataArray.count {
+            if iPhoneHeartRateStringDataArray.count > 0 {
+                for dataIndex in 0..<self.iPhoneHeartRateStringDataArray.count {
                     if dataIndex % 4000 == 0 {
                         if dataIndex==0 {
-                            self.heartRateStringToUpload += self.heartRateStringDataArray[dataIndex] + ","
+                            self.iPhoneHeartRateStringToUpload += self.iPhoneHeartRateStringDataArray[dataIndex] + ","
                             continue
                         }
-                        self.heartRateStringArray.append(heartRateStringToUpload)
-                        heartRateStringToUpload = ""
+                        self.iPhoneHeartRateStringArray.append(iPhoneHeartRateStringToUpload)
+                        iPhoneHeartRateStringToUpload = ""
                     }
                     
-                    if dataIndex == self.heartRateStringDataArray.count-1 {
-                        self.heartRateStringToUpload += self.heartRateStringDataArray[dataIndex]
-                        self.heartRateStringArray.append(heartRateStringToUpload)
-                        heartRateStringToUpload = ""
+                    if dataIndex == self.iPhoneHeartRateStringDataArray.count-1 {
+                        self.iPhoneHeartRateStringToUpload += self.iPhoneHeartRateStringDataArray[dataIndex]
+                        self.iPhoneHeartRateStringArray.append(iPhoneHeartRateStringToUpload)
+                        iPhoneHeartRateStringToUpload = ""
                         break
                     }
                     
-                    self.heartRateStringToUpload += self.heartRateStringDataArray[dataIndex] + ","
+                    self.iPhoneHeartRateStringToUpload += self.iPhoneHeartRateStringDataArray[dataIndex] + ","
                 }
             }
             
-            if heartRateStringArray.count > 0 {
-                for i in 0..<heartRateStringArray.count {
-                    self.writeHealthCSV(healthData: heartRateStringArray[i], dataType: "HR", index: i)
-                    uploadCSVDataToMobius(csvData: heartRateStringArray[i], containerName: "HR", fileNumber: i)
+            if AWatchHeartRateStringDataArray.count > 0 {
+                for dataIndex in 0..<self.AWatchHeartRateStringDataArray.count {
+                    if dataIndex % 4000 == 0 {
+                        if dataIndex==0 {
+                            self.AWatchHeartRateStringToUpload += self.AWatchHeartRateStringDataArray[dataIndex] + ","
+                            continue
+                        }
+                        self.AWatchHeartRateStringArray.append(AWatchHeartRateStringToUpload)
+                        AWatchHeartRateStringToUpload = ""
+                    }
+                    
+                    if dataIndex == self.AWatchHeartRateStringDataArray.count-1 {
+                        self.AWatchHeartRateStringToUpload += self.AWatchHeartRateStringDataArray[dataIndex]
+                        self.AWatchHeartRateStringArray.append(AWatchHeartRateStringToUpload)
+                        AWatchHeartRateStringToUpload = ""
+                        break
+                    }
+                    
+                    self.AWatchHeartRateStringToUpload += self.AWatchHeartRateStringDataArray[dataIndex] + ","
+                }
+            }
+            
+            if iPhoneHeartRateStringArray.count > 0 {
+                for i in 0..<iPhoneHeartRateStringArray.count {
+                    self.writeHealthCSV(healthData: iPhoneHeartRateStringArray[i], deviceType: "iphone", dataType: "HR", index: i)
+                    uploadCSVDataToMobius(csvData: iPhoneHeartRateStringArray[i], deviceType: "iphone", containerName: "HR", fileNumber: i)
+                }
+            }
+            
+            if AWatchHeartRateStringArray.count > 0 {
+                for i in 0..<AWatchHeartRateStringArray.count {
+                    self.writeHealthCSV(healthData: AWatchHeartRateStringArray[i], deviceType: "watch", dataType: "HR", index: i)
+                    uploadCSVDataToMobius(csvData: AWatchHeartRateStringArray[i], deviceType: "watch", containerName: "HR", fileNumber: i)
                 }
             }
             
             heartRateDataArray.removeAll()
-            heartRateStringDataArray.removeAll()
-            heartRateStringArray.removeAll()
+            iPhoneHeartRateStringDataArray.removeAll()
+            AWatchHeartRateStringDataArray.removeAll()
+            iPhoneHeartRateStringArray.removeAll()
+            AWatchHeartRateStringArray.removeAll()
+            iPhoneHeartRateStringToUpload = ""
+            AWatchHeartRateStringToUpload = ""
         }
     }
     
     // Mobius 서버에 CSV 파일을 업로드하는 메소드
-    private func uploadCSVDataToMobius(csvData: String, containerName: String, fileNumber: Int) {
+    private func uploadCSVDataToMobius(csvData: String, deviceType: String, containerName: String, fileNumber: Int) {
         let semaphore = DispatchSemaphore (value: 0)
         
         let parameters = "{\n    \"m2m:cin\": {\n        \"con\": \"\(csvData)\"\n    }\n}"
         let postData = parameters.data(using: .utf8)
         
         let userID = UserDefaults.standard.string(forKey: "UserID")!
-        var mainContainerName: String = ""
         
-        if containerName == "mAcc" || containerName == "mGyr" || containerName == "mPre" {
-            mainContainerName = "mobile"
-        } else if containerName == "steps" || containerName == "calories" || containerName == "distance" || containerName == "sleep" || containerName == "HR" {
-            mainContainerName = "health"
-        }
-        
-        let urlString = "http://114.71.220.59:7579/Mobius/\(userID)/\(mainContainerName)/\(containerName)"
+        let urlString = "http://114.71.220.59:7579/Mobius/\(userID)/health/\(deviceType)/\(containerName)"
+        // 마지막 컨테이너 이름에 슬래시(/)를 추가하면 하위 디렉터리를 또 찾게 됨
         print(urlString)
         
         var request = URLRequest(url: URL(string: urlString)!,timeoutInterval: Double.infinity)
@@ -640,7 +839,7 @@ class HealthKitManager {
                 return
             }
             
-            self.removeCSV(containerName: containerName, index: fileNumber)
+            self.removeCSV(deviceType: deviceType, containerName: containerName, index: fileNumber)
             
             print("\(containerName) Data is served.")
             semaphore.signal()
@@ -650,18 +849,12 @@ class HealthKitManager {
         semaphore.wait()
     }
     
-    private func removeCSV(containerName: String, index: Int) {
+    private func removeCSV(deviceType: String, containerName: String, index: Int) {
         let fileManager: FileManager = FileManager.default
         
-        var folderName = ""
+        let folderName = "healthCSVFolder"
         
-        if containerName == "mAcc" || containerName == "mGyr" || containerName == "mPre" {
-            folderName = "saveSensorCSVFolder"
-        } else if containerName == "steps" || containerName == "calories" || containerName == "distance" || containerName == "sleep" || containerName == "HR" {
-            folderName = "saveHealthCSVFolder"
-        }
-        
-        let csvFileName = "\(containerName)_\(index).csv"
+        let csvFileName = "\(deviceType)_\(containerName)_\(index).csv"
         
         let documentUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
         let diretoryUrl = documentUrl.appendingPathComponent(folderName)

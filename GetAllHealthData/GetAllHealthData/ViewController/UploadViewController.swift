@@ -120,7 +120,7 @@ class UploadViewController: UIViewController {
             uploadDistanceButton.configuration = buttonConfiguration
             uploadDistanceButton.isEnabled = false
         }
-        if (UserDefaults.standard.value(forKey: "sleepUplaoded") != nil) == true {
+        if (UserDefaults.standard.value(forKey: "sleepUploaded") != nil) == true {
             var buttonConfiguration = UIButton.Configuration.filled()
             buttonConfiguration.baseBackgroundColor = .lightGray
             buttonConfiguration.baseForegroundColor = .white
